@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
-import { fadeInUp, slideInLeft, slideInRight } from "../utils/animations";
 
 export const Contact = () => {
   const [formData, setFormData] = useState({
@@ -37,7 +35,7 @@ export const Contact = () => {
       icon: Phone,
       title: "Phone",
       value: "+62 857 9347 8680",
-      href: "tel:+15551234567",
+      href: "tel:+6285793478680",
     },
     {
       icon: MapPin,
@@ -86,7 +84,7 @@ export const Contact = () => {
                     <info.icon size={20} className="text-white" />
                   </div>
                   <div>
-                    <h4 className="text-font-semibold text-gray-900 dark:text-white">
+                    <h4 className="font-semibold text-gray-900 dark:text-white">
                       {info.title}
                     </h4>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -98,13 +96,8 @@ export const Contact = () => {
             </div>
           </div>
 
-          {/* Contact Form */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={slideInRight}
-          >
+          {/* Contact Form (tanpa motion) */}
+          <div>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -162,17 +155,15 @@ export const Contact = () => {
                   placeholder="Tell me about your project..."
                 />
               </div>
-              <motion.button
+              <button
                 type="submit"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500 text-white rounded-lg font-medium hover:shadow-lg transition-shadow duration-300 flex items-center justify-center gap-2"
+                className="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500 text-white rounded-lg font-medium hover:shadow-lg transition-shadow duration-300 flex items-center justify-center gap-2 hover:scale-105"
               >
                 <Send size={20} />
                 Send Message
-              </motion.button>
+              </button>
             </form>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
