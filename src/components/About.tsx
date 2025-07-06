@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Code2, Folder } from "lucide-react";
-import { fadeInUp, slideInLeft, slideInRight } from "../utils/animations";
+import { fadeInUp } from "../utils/animations";
 
 export const About = () => {
   const stats = [
@@ -12,11 +12,12 @@ export const About = () => {
   return (
     <section id="about" className="py-20 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
+        {/* Section Title (masih boleh motion) */}
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
-          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
@@ -25,14 +26,8 @@ export const About = () => {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Foto Profile, animasi kiri */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={slideInLeft}
-            className="space-y-6"
-          >
+          {/* Foto Profile */}
+          <div className="space-y-6">
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500 rounded-2xl p-8 text-white">
               <div className="w-64 h-64 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-6 overflow-hidden">
                 <img
@@ -47,14 +42,14 @@ export const About = () => {
               <h3 className="text-2xl font-bold text-center">Suryaalghifari</h3>
               <p className="text-center text-white/90">Full Stack Developer</p>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Bio + Stats (animasi kanan) */}
+          {/* Bio + Stats */}
           <motion.div
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
-            variants={slideInRight}
+            transition={{ duration: 0.6, delay: 0.2 }}
             className="space-y-6"
           >
             <div className="prose prose-lg dark:prose-invert max-w-none">
