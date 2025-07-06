@@ -50,13 +50,7 @@ export const Contact = () => {
   return (
     <section id="contact" className="py-20 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeInUp}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Get In{" "}
             <span className="text-blue-600 dark:text-orange-500">Touch</span>
@@ -65,7 +59,7 @@ export const Contact = () => {
             Ready to start your next project? Let's work together to create
             something amazing
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Info */}

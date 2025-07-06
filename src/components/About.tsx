@@ -13,17 +13,11 @@ export const About = () => {
     <section id="about" className="py-20 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
         {/* Section Title (masih boleh motion) */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             About <span className="text-blue-600 dark:text-orange-500">Me</span>
           </h2>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Foto Profile */}

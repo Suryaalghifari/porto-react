@@ -129,13 +129,7 @@ export const Experience = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Title: animasi sekali */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500">
               Experience
@@ -144,7 +138,7 @@ export const Experience = () => {
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             My professional journey and the impact I've made along the way
           </p>
-        </motion.div>
+        </div>
 
         <div className="max-w-5xl mx-auto">
           <div className="relative">

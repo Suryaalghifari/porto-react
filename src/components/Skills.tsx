@@ -121,13 +121,7 @@ export const Skills = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeInUp}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Technical{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500">
@@ -138,7 +132,7 @@ export const Skills = () => {
             A comprehensive toolkit that enables me to build robust and scalable
             applications
           </p>
-        </motion.div>
+        </div>
 
         {/* Skills Grid: tidak perlu motion.div per skill */}
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
