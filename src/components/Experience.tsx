@@ -1,22 +1,14 @@
-import React, { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
+  Building,
   MapPin,
   Calendar,
-  Building,
-  Award,
   Users,
   TrendingUp,
-  ChevronDown,
-  ChevronUp,
+  Award,
 } from "lucide-react";
-import { fadeInUp, slideInLeft, slideInRight } from "../utils/animations";
+import { motion } from "framer-motion";
 
 export const Experience = () => {
-  const [expandedExperience, setExpandedExperience] = useState<number | null>(
-    null
-  );
-
   const experiences = [
     {
       title: "Freelance Web Developer",
@@ -88,29 +80,18 @@ export const Experience = () => {
     },
   ];
 
-  const toggleExpanded = (index: number) => {
-    setExpandedExperience(expandedExperience === index ? null : index);
-  };
-
-  // Optimasi background icon floating
-  const bgIcons = useMemo(
-    () =>
-      [Building, TrendingUp].map((Icon, i) => ({
-        Icon,
-        top: 20 + i * 30,
-        left: 20 + i * 50,
-        duration: 14 + i * 3,
-        delay: i * 2,
-      })),
-    []
-  );
+  // Background icon simple
+  const bgIcons = [
+    { Icon: Building, top: 22, left: 24, size: 44, duration: 16 },
+    { Icon: TrendingUp, top: 58, left: 55, size: 44, duration: 20 },
+  ];
 
   return (
     <section
       id="experience"
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
     >
-      {/* Animated Background */}
+      {/* Animated Background: orb + 2 icon saja */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute top-1/4 right-1/4 w-64 h-64 bg-gradient-to-r from-blue-400/20 to-purple-600/20 dark:from-orange-400/20 dark:to-yellow-600/20 rounded-full blur-3xl"
@@ -130,33 +111,29 @@ export const Experience = () => {
           <motion.div
             key={idx}
             className="absolute text-blue-500/10 dark:text-orange-500/10"
-            style={{
-              top: `${bg.top}%`,
-              left: `${bg.left}%`,
-            }}
+            style={{ top: `${bg.top}%`, left: `${bg.left}%` }}
             animate={{
               y: [0, -20, 0],
-              rotate: [0, 360],
               scale: [1, 1.2, 1],
             }}
             transition={{
               duration: bg.duration,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: bg.delay,
             }}
           >
-            <bg.Icon size={40} />
+            <bg.Icon size={bg.size} />
           </motion.div>
         ))}
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
+        {/* Section Title: animasi sekali */}
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
-          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
@@ -171,7 +148,7 @@ export const Experience = () => {
 
         <div className="max-w-5xl mx-auto">
           <div className="relative">
-            {/* Timeline Line */}
+            {/* Timeline Line: animasi scaleY sekali */}
             <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 w-1 h-full">
               <motion.div
                 className="w-full h-full bg-gradient-to-b from-blue-600 via-purple-600 to-blue-600 dark:from-orange-500 dark:via-yellow-500 dark:to-orange-500 rounded-full"
@@ -183,23 +160,16 @@ export const Experience = () => {
             </div>
 
             {experiences.map((exp, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.3 }}
-                variants={index % 2 === 0 ? slideInLeft : slideInRight}
                 className={`relative flex items-center mb-16 ${
                   index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                 }`}
               >
                 {/* Timeline Node */}
-                <motion.div
-                  className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 z-20"
-                  whileHover={{ scale: 1.1 }}
-                >
+                <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 z-20">
                   <div className="w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500 rounded-full border-4 border-white dark:border-gray-800 shadow-lg" />
-                </motion.div>
+                </div>
 
                 {/* Content Card */}
                 <div
@@ -269,61 +239,34 @@ export const Experience = () => {
                         ))}
                       </div>
 
-                      {/* Expand Button */}
-                      <button
-                        onClick={() => toggleExpanded(index)}
-                        className="flex items-center gap-2 text-blue-600 dark:text-orange-500 font-medium hover:text-blue-700 dark:hover:text-orange-400 transition-colors duration-200"
-                      >
-                        {expandedExperience === index
-                          ? "Show Less"
-                          : "Show Achievements"}
-                        {expandedExperience === index ? (
-                          <ChevronUp size={16} />
-                        ) : (
-                          <ChevronDown size={16} />
-                        )}
-                      </button>
-
-                      {/* Expanded Content (pakai AnimatePresence tetap boleh) */}
-                      <AnimatePresence>
-                        {expandedExperience === index && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700"
-                          >
-                            <h4 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                              <Award size={16} className="text-yellow-500" />
-                              Key Achievements:
-                            </h4>
-                            <ul className="space-y-3">
-                              {exp.achievements.map((achievement, i) => (
-                                <li
-                                  key={i}
-                                  className="text-sm text-gray-600 dark:text-gray-300 flex items-start gap-3"
-                                >
-                                  <span className="w-2 h-2 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500 rounded-full mt-2 flex-shrink-0" />
-                                  {achievement}
-                                </li>
-                              ))}
-                            </ul>
-                            <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                              <p className="text-sm text-gray-600 dark:text-gray-400">
-                                <span className="font-medium">
-                                  Salary Range:
-                                </span>{" "}
-                                {exp.salary}
-                              </p>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                      {/* Achievements (langsung tampil semua) */}
+                      <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <h4 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                          <Award size={16} className="text-yellow-500" />
+                          Key Achievements:
+                        </h4>
+                        <ul className="space-y-3">
+                          {exp.achievements.map((achievement, i) => (
+                            <li
+                              key={i}
+                              className="text-sm text-gray-600 dark:text-gray-300 flex items-start gap-3"
+                            >
+                              <span className="w-2 h-2 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500 rounded-full mt-2 flex-shrink-0" />
+                              {achievement}
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            <span className="font-medium">Salary Range:</span>{" "}
+                            {exp.salary}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
