@@ -2,23 +2,29 @@ import React from "react";
 import { motion } from "framer-motion";
 
 export const AnimatedBackground = () => {
+  // --- ⬇️ letakkan useMemo DI DALAM fungsi komponen ---
+  const particles = React.useMemo(
+    () =>
+      [...Array(8)].map(() => ({
+        startX: Math.random() * window.innerWidth,
+        startY: Math.random() * window.innerHeight,
+        endX: Math.random() * window.innerWidth,
+        endY: Math.random() * window.innerHeight,
+        duration: Math.random() * 12 + 8,
+      })),
+    []
+  );
+
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-      {/* Floating Particles */}
-      {[...Array(20)].map((_, i) => (
+      {particles.map((p, i) => (
         <motion.div
           key={i}
           className="absolute w-2 h-2 bg-blue-500/20 dark:bg-orange-500/20 rounded-full"
-          initial={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-          }}
-          animate={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-          }}
+          initial={{ x: p.startX, y: p.startY }}
+          animate={{ x: p.endX, y: p.endY }}
           transition={{
-            duration: Math.random() * 20 + 10,
+            duration: p.duration,
             repeat: Infinity,
             repeatType: "reverse",
             ease: "linear",

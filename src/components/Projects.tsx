@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
 import {
   ExternalLink,
   Github,
@@ -25,12 +25,11 @@ const cardVariants = {
 export const Projects = () => {
   const [showAll, setShowAll] = useState(false);
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
-
-  // ===== STATE untuk GALLERY =====
   const [modalProjectImages, setModalProjectImages] = useState<string[] | null>(
     null
   );
   const [modalImageIdx, setModalImageIdx] = useState<number>(0);
+  const [modalDesc, setModalDesc] = useState<string | null>(null);
 
   const projects = [
     {
@@ -314,18 +313,28 @@ export const Projects = () => {
     // ... project lain
   ];
 
+  const bgIcons = useMemo(
+    () =>
+      [...Array(3)].map(() => ({
+        top: Math.random() * 80 + 5,
+        left: Math.random() * 80 + 5,
+        duration: Math.random() * 8 + 8,
+        delay: Math.random() * 2,
+      })),
+    []
+  );
+
   const featuredProjects = projects.filter((project) => project.featured);
   const otherProjects = projects.filter((project) => !project.featured);
   const allDisplayed = showAll ? projects : featuredProjects;
-  const [modalDesc, setModalDesc] = useState<string | null>(null);
 
   return (
     <section
       id="projects"
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
     >
-      {/* ANIMASI BACKGROUND */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <motion.div
           className="absolute top-1/4 left-1/4 w-72 h-72 bg-gradient-to-r from-blue-400/20 to-purple-600/20 dark:from-orange-400/20 dark:to-yellow-600/20 rounded-full blur-3xl"
           animate={{
@@ -340,31 +349,32 @@ export const Projects = () => {
             ease: "easeInOut",
           }}
         />
-        {[...Array(6)].map((_, i) => (
+        {bgIcons.map((icon, i) => (
           <motion.div
             key={i}
             className="absolute text-blue-500/10 dark:text-orange-500/10"
             style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
+              top: `${icon.top}%`,
+              left: `${icon.left}%`,
             }}
             animate={{
               y: [0, -30, 0],
               rotate: [0, 360],
-              scale: [1, 1.3, 1],
+              scale: [1, 1.2, 1],
             }}
             transition={{
-              duration: 8 + i,
+              duration: icon.duration,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 0.5,
+              delay: icon.delay,
             }}
           >
             <Github size={24} />
           </motion.div>
         ))}
       </div>
-      {/* END ANIMASI BACKGROUND */}
+      {/* End Animated Background */}
+
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
@@ -379,151 +389,135 @@ export const Projects = () => {
           </p>
         </div>
 
-        {/* Grid projects dengan animasi */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={showAll ? "all" : "featured"}
-            variants={gridVariants}
-            initial="visible"
-            animate="visible"
-            exit="hidden"
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
-          >
-            {allDisplayed.map((project, idx) => (
-              <motion.div
-                key={project.title + idx}
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ duration: 0.5, delay: idx * 0.08 }}
-                whileHover={{
-                  scale: 1.04,
-                  y: -5,
-                  boxShadow: "0 10px 24px 0 rgba(0,0,0,0.15)",
-                }}
-                onMouseEnter={() => setHoveredProject(idx)}
-                onMouseLeave={() => setHoveredProject(null)}
-                className="group relative bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700 h-full flex flex-col"
-              >
-                <div className="relative group">
-                  {/* === Thumbnail utama project === */}
-                  {project.images && project.images.length > 0 ? (
-                    <img
-                      src={project.thumbnail}
-                      alt={project.title}
-                      className="w-full h-48 object-contain cursor-pointer bg-white"
-                      style={{ padding: "20px" }} // opsional, biar ada ruang ekstra
-                    />
-                  ) : (
-                    <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-400">
-                      No Image
-                    </div>
-                  )}
-                  {/* === Aksi/Overlay === */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-                    <div className="p-4 flex space-x-3">
-                      {project.images && project.images.length > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (project.externalPreview) {
-                              window.open(project.demo, "_blank");
-                            } else {
-                              setModalProjectImages(project.images);
-                              setModalImageIdx(0);
-                            }
-                          }}
-                          className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-300"
-                          aria-label="Preview Images"
-                        >
-                          <Eye size={18} />
-                        </button>
-                      )}
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-300"
-                        aria-label="View Github"
-                      >
-                        <Github size={18} />
-                      </a>
-                    </div>
+        {/* GRID PROJECTS TANPA ANIMASI MOTION */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {allDisplayed.map((project, idx) => (
+            <div
+              key={project.title + idx}
+              onMouseEnter={() => setHoveredProject(idx)}
+              onMouseLeave={() => setHoveredProject(null)}
+              className="group relative bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700 h-full flex flex-col transform-gpu hover:scale-[1.04] hover:-translate-y-1"
+              style={{ willChange: "transform, box-shadow" }}
+            >
+              <div className="relative group">
+                {/* Thumbnail utama project */}
+                {project.images && project.images.length > 0 ? (
+                  <img
+                    src={project.thumbnail}
+                    alt={project.title}
+                    className="w-full h-48 object-contain cursor-pointer bg-white"
+                    loading="lazy"
+                    style={{ padding: "20px" }}
+                  />
+                ) : (
+                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-400">
+                    No Image
                   </div>
+                )}
 
-                  {project.featured && (
-                    <div className="absolute top-4 right-4 px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-500 dark:from-orange-500 dark:to-yellow-500 text-white text-xs font-bold rounded-full">
-                      Featured
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex-1 flex flex-col p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-orange-500 transition-colors duration-300">
-                    {project.title}
-                  </h3>
-                  <div className="mb-4">
-                    <p
-                      className={`text-gray-600 dark:text-gray-300 text-sm leading-relaxed ${
-                        project.description.length > 80 ? "line-clamp-3" : ""
-                      }`}
-                    >
-                      {project.description}
-                    </p>
-                    {project.description.length > 80 && (
+                {/* Overlay aksi */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end pointer-events-auto">
+                  <div className="p-4 flex space-x-3">
+                    {project.images && project.images.length > 0 && (
                       <button
-                        className="text-blue-500 underline mt-1 text-xs"
-                        onClick={() => setModalDesc(project.description)}
                         type="button"
-                        style={{ marginTop: "-6px" }} // biar lebih nempel
+                        onClick={() => {
+                          if (project.externalPreview) {
+                            window.open(project.demo, "_blank");
+                          } else {
+                            setModalProjectImages(project.images);
+                            setModalImageIdx(0);
+                          }
+                        }}
+                        className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-300"
+                        aria-label="Preview Images"
                       >
-                        Read More
+                        <Eye size={18} />
                       </button>
                     )}
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-1 bg-blue-100 dark:bg-orange-100 text-blue-800 dark:text-orange-800 rounded-full text-xs font-medium"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex space-x-3 mt-auto">
-                    <a
-                      href=""
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500 text-white rounded-lg font-medium text-center hover:shadow-lg transition-shadow duration-300 flex items-center justify-center gap-2"
-                    >
-                      <ExternalLink size={16} />
-                      Demo
-                    </a>
                     <a
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 px-4 py-2 border-2 border-blue-600 dark:border-orange-500 text-blue-600 dark:text-orange-500 rounded-lg font-medium text-center hover:bg-blue-600 dark:hover:bg-orange-500 hover:text-white transition-colors duration-300 flex items-center justify-center gap-2"
+                      className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-300"
+                      aria-label="View Github"
                     >
-                      <Github size={16} />
-                      Code
+                      <Github size={18} />
                     </a>
                   </div>
                 </div>
-                {/* Hover gradient effect */}
-                {hoveredProject === idx && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-600/10 dark:from-orange-500/10 dark:to-yellow-600/10 rounded-2xl pointer-events-none" />
-                )}
-              </motion.div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
 
-        {/* Tombol Show More/Less */}
+                {/* Featured badge */}
+                {project.featured && (
+                  <div className="absolute top-4 right-4 px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-500 dark:from-orange-500 dark:to-yellow-500 text-white text-xs font-bold rounded-full">
+                    Featured
+                  </div>
+                )}
+              </div>
+
+              <div className="flex-1 flex flex-col p-6">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-orange-500 transition-colors duration-300">
+                  {project.title}
+                </h3>
+                <div className="mb-4">
+                  <p
+                    className={`text-gray-600 dark:text-gray-300 text-sm leading-relaxed ${
+                      project.description.length > 80 ? "line-clamp-3" : ""
+                    }`}
+                  >
+                    {project.description}
+                  </p>
+                  {project.description.length > 80 && (
+                    <button
+                      className="text-blue-500 underline mt-1 text-xs"
+                      onClick={() => setModalDesc(project.description)}
+                      type="button"
+                      style={{ marginTop: "-6px" }}
+                    >
+                      Read More
+                    </button>
+                  )}
+                </div>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1 bg-blue-100 dark:bg-orange-100 text-blue-800 dark:text-orange-800 rounded-full text-xs font-medium"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex space-x-3 mt-auto">
+                  <a
+                    href={project.demo || ""}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500 text-white rounded-lg font-medium text-center hover:shadow-lg transition-shadow duration-300 flex items-center justify-center gap-2"
+                  >
+                    <ExternalLink size={16} />
+                    Demo
+                  </a>
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 px-4 py-2 border-2 border-blue-600 dark:border-orange-500 text-blue-600 dark:text-orange-500 rounded-lg font-medium text-center hover:bg-blue-600 dark:hover:bg-orange-500 hover:text-white transition-colors duration-300 flex items-center justify-center gap-2"
+                  >
+                    <Github size={16} />
+                    Code
+                  </a>
+                </div>
+              </div>
+              {/* Hover gradient effect */}
+              {hoveredProject === idx && (
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-600/10 dark:from-orange-500/10 dark:to-yellow-600/10 rounded-2xl pointer-events-none" />
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Show More/Less */}
         {otherProjects.length > 0 && (
           <div className="text-center">
             <button
@@ -545,7 +539,7 @@ export const Projects = () => {
           </div>
         )}
 
-        {/* === MODAL GALLERY === */}
+        {/* === MODAL GALLERY & DESC === */}
         {modalProjectImages && (
           <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
@@ -559,6 +553,7 @@ export const Projects = () => {
                 src={modalProjectImages[modalImageIdx]}
                 alt={`Preview ${modalImageIdx + 1}`}
                 className="max-w-[90vw] max-h-[85vh] rounded-xl shadow-2xl border-4 border-white object-contain"
+                loading="lazy"
               />
               <div className="flex justify-center mt-4 space-x-2">
                 {modalProjectImages.map((img, i) => (
@@ -575,6 +570,7 @@ export const Projects = () => {
                       src={img}
                       alt={`thumb${i + 1}`}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   </button>
                 ))}

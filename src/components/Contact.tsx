@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Send,
-  Github,
-  Linkedin,
-  Twitter,
-} from "lucide-react";
+import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { fadeInUp, slideInLeft, slideInRight } from "../utils/animations";
 
 export const Contact = () => {
@@ -55,8 +47,6 @@ export const Contact = () => {
     },
   ];
 
-  const socialLinks = [];
-
   return (
     <section id="contact" className="py-20 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
@@ -79,13 +69,7 @@ export const Contact = () => {
 
         <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Info */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={slideInLeft}
-            className="space-y-8"
-          >
+          <div className="space-y-8">
             <div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                 Let's Connect
@@ -96,30 +80,29 @@ export const Contact = () => {
                 I'd love to hear from you.
               </p>
             </div>
-
             <div className="space-y-6">
               {contactInfo.map((info, index) => (
-                <motion.a
+                <a
                   key={index}
                   href={info.href}
-                  whileHover={{ scale: 1.05, x: 10 }}
-                  className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300"
+                  className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 hover:scale-105 hover:translate-x-2"
+                  style={{ willChange: "transform, background" }}
                 >
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500 rounded-lg flex items-center justify-center">
                     <info.icon size={20} className="text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white">
+                    <h4 className="text-font-semibold text-gray-900 dark:text-white">
                       {info.title}
                     </h4>
                     <p className="text-gray-600 dark:text-gray-300">
                       {info.value}
                     </p>
                   </div>
-                </motion.a>
+                </a>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* Contact Form */}
           <motion.div
@@ -167,7 +150,6 @@ export const Contact = () => {
                   />
                 </div>
               </div>
-
               <div>
                 <label
                   htmlFor="message"
@@ -186,7 +168,6 @@ export const Contact = () => {
                   placeholder="Tell me about your project..."
                 />
               </div>
-
               <motion.button
                 type="submit"
                 whileHover={{ scale: 1.05 }}

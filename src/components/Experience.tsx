@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
@@ -92,13 +92,26 @@ export const Experience = () => {
     setExpandedExperience(expandedExperience === index ? null : index);
   };
 
+  // Optimasi background icon floating
+  const bgIcons = useMemo(
+    () =>
+      [Building, TrendingUp].map((Icon, i) => ({
+        Icon,
+        top: 20 + i * 30,
+        left: 20 + i * 50,
+        duration: 14 + i * 3,
+        delay: i * 2,
+      })),
+    []
+  );
+
   return (
     <section
       id="experience"
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
     >
       {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute top-1/4 right-1/4 w-64 h-64 bg-gradient-to-r from-blue-400/20 to-purple-600/20 dark:from-orange-400/20 dark:to-yellow-600/20 rounded-full blur-3xl"
           animate={{
@@ -113,15 +126,13 @@ export const Experience = () => {
             ease: "easeInOut",
           }}
         />
-
-        {/* Floating Icons */}
-        {[Building, Users, Award, TrendingUp].map((Icon, index) => (
+        {bgIcons.map((bg, idx) => (
           <motion.div
-            key={index}
+            key={idx}
             className="absolute text-blue-500/10 dark:text-orange-500/10"
             style={{
-              top: `${20 + index * 20}%`,
-              left: `${10 + index * 15}%`,
+              top: `${bg.top}%`,
+              left: `${bg.left}%`,
             }}
             animate={{
               y: [0, -20, 0],
@@ -129,13 +140,13 @@ export const Experience = () => {
               scale: [1, 1.2, 1],
             }}
             transition={{
-              duration: 10 + index * 2,
+              duration: bg.duration,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: index * 2,
+              delay: bg.delay,
             }}
           >
-            <Icon size={40} />
+            <bg.Icon size={40} />
           </motion.div>
         ))}
       </div>
@@ -160,7 +171,7 @@ export const Experience = () => {
 
         <div className="max-w-5xl mx-auto">
           <div className="relative">
-            {/* Enhanced Timeline Line */}
+            {/* Timeline Line */}
             <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 w-1 h-full">
               <motion.div
                 className="w-full h-full bg-gradient-to-b from-blue-600 via-purple-600 to-blue-600 dark:from-orange-500 dark:via-yellow-500 dark:to-orange-500 rounded-full"
@@ -168,20 +179,6 @@ export const Experience = () => {
                 whileInView={{ scaleY: 1 }}
                 transition={{ duration: 2, ease: "easeInOut" }}
                 style={{ originY: 0 }}
-              />
-
-              {/* Animated Pulse */}
-              <motion.div
-                className="absolute top-0 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-blue-500 dark:bg-orange-500 rounded-full"
-                animate={{
-                  y: [0, 800],
-                  scale: [1, 1.5, 1],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
               />
             </div>
 
@@ -196,38 +193,22 @@ export const Experience = () => {
                   index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                 }`}
               >
-                {/* Enhanced Timeline Node */}
+                {/* Timeline Node */}
                 <motion.div
                   className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 z-20"
-                  whileHover={{ scale: 1.2 }}
+                  whileHover={{ scale: 1.1 }}
                 >
-                  <div className="w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500 rounded-full border-4 border-white dark:border-gray-800 shadow-lg">
-                    <motion.div
-                      className="w-full h-full bg-white/30 rounded-full"
-                      animate={{
-                        scale: [1, 1.5, 1],
-                        opacity: [1, 0.5, 1],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    />
-                  </div>
+                  <div className="w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500 rounded-full border-4 border-white dark:border-gray-800 shadow-lg" />
                 </motion.div>
 
-                {/* Enhanced Content Card */}
+                {/* Content Card */}
                 <div
                   className={`w-full md:w-5/12 ml-16 md:ml-0 ${
                     index % 2 === 0 ? "md:mr-8" : "md:ml-8"
                   }`}
                 >
-                  <motion.div
-                    whileHover={{ scale: 1.02, y: -5 }}
-                    className="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700 relative overflow-hidden"
-                  >
-                    {/* Background Gradient */}
+                  <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700 relative overflow-hidden">
+                    {/* Card Gradient */}
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-orange-900/10 dark:to-yellow-900/10 rounded-2xl" />
 
                     <div className="relative z-10">
@@ -278,24 +259,20 @@ export const Experience = () => {
 
                       {/* Technologies */}
                       <div className="flex flex-wrap gap-2 mb-6">
-                        {exp.technologies.map((tech, i) => (
-                          <motion.span
+                        {exp.technologies.map((tech) => (
+                          <span
                             key={tech}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: i * 0.1 }}
                             className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-xs font-medium hover:bg-blue-100 dark:hover:bg-orange-100 hover:text-blue-800 dark:hover:text-orange-800 transition-colors duration-200"
                           >
                             {tech}
-                          </motion.span>
+                          </span>
                         ))}
                       </div>
 
                       {/* Expand Button */}
-                      <motion.button
+                      <button
                         onClick={() => toggleExpanded(index)}
                         className="flex items-center gap-2 text-blue-600 dark:text-orange-500 font-medium hover:text-blue-700 dark:hover:text-orange-400 transition-colors duration-200"
-                        whileHover={{ x: 5 }}
                       >
                         {expandedExperience === index
                           ? "Show Less"
@@ -305,9 +282,9 @@ export const Experience = () => {
                         ) : (
                           <ChevronDown size={16} />
                         )}
-                      </motion.button>
+                      </button>
 
-                      {/* Expanded Content */}
+                      {/* Expanded Content (pakai AnimatePresence tetap boleh) */}
                       <AnimatePresence>
                         {expandedExperience === index && (
                           <motion.div
@@ -323,19 +300,15 @@ export const Experience = () => {
                             </h4>
                             <ul className="space-y-3">
                               {exp.achievements.map((achievement, i) => (
-                                <motion.li
+                                <li
                                   key={i}
-                                  initial={{ opacity: 0, x: -20 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: i * 0.1 }}
                                   className="text-sm text-gray-600 dark:text-gray-300 flex items-start gap-3"
                                 >
                                   <span className="w-2 h-2 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500 rounded-full mt-2 flex-shrink-0" />
                                   {achievement}
-                                </motion.li>
+                                </li>
                               ))}
                             </ul>
-
                             <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                               <p className="text-sm text-gray-600 dark:text-gray-400">
                                 <span className="font-medium">
@@ -348,7 +321,7 @@ export const Experience = () => {
                         )}
                       </AnimatePresence>
                     </div>
-                  </motion.div>
+                  </div>
                 </div>
               </motion.div>
             ))}

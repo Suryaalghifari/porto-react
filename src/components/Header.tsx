@@ -4,7 +4,8 @@ import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
 
-export const Header = () => {
+// Optional: memoize Header to prevent unnecessary re-renders
+const HeaderComponent: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { scrollY, scrollDirection } = useScrollAnimation();
   const [scrolled, setScrolled] = useState(false);
@@ -38,14 +39,16 @@ export const Header = () => {
         y: scrollDirection === "up" || scrollY < 100 ? 0 : -100,
       }}
       transition={{ duration: 0.3 }}
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-lg border-b border-gray-200/20 dark:border-gray-700/20"
-          : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300
+        ${
+          scrolled
+            ? "bg-white/90 dark:bg-gray-900/90 /*backdrop-blur-md*/ shadow-lg border-b border-gray-200/20 dark:border-gray-700/20"
+            : "bg-transparent"
+        }`}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
+          {/* Logo */}
           <motion.div
             whileHover={{ scale: 1.05 }}
             className="text-2xl font-bold text-gray-900 dark:text-white relative"
@@ -60,10 +63,10 @@ export const Header = () => {
             />
           </motion.div>
 
-          {/* Desktop Menu */}
+          {/* Desktop Menu (No Framer-Motion Animation Per Item!) */}
           <nav className="hidden md:flex items-center space-x-8">
-            {menuItems.map((item, index) => (
-              <motion.a
+            {menuItems.map((item) => (
+              <a
                 key={item.name}
                 href={item.href}
                 onClick={(e) => {
@@ -71,20 +74,11 @@ export const Header = () => {
                   handleMenuClick(item.href);
                 }}
                 className="relative text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-orange-500 transition-colors duration-300 font-medium group"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
               >
                 {item.name}
-                <motion.div
-                  className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500"
-                  initial={{ width: 0 }}
-                  whileHover={{ width: "100%" }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.a>
+                {/* Hover underline */}
+                <span className="absolute -bottom-1 left-0 h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500 transition-all duration-300"></span>
+              </a>
             ))}
             <ThemeToggle />
           </nav>
@@ -108,7 +102,7 @@ export const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu (tetap smooth, animasi 1x di panel, tidak di tiap item) */}
         <motion.nav
           initial={{ opacity: 0, height: 0 }}
           animate={{
@@ -118,9 +112,9 @@ export const Header = () => {
           transition={{ duration: 0.3 }}
           className="md:hidden overflow-hidden"
         >
-          <div className="py-4 space-y-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md rounded-lg mt-4 border border-gray-200/20 dark:border-gray-700/20">
-            {menuItems.map((item, index) => (
-              <motion.a
+          <div className="py-4 space-y-4 bg-white/90 dark:bg-gray-900/90 /*backdrop-blur-md*/ rounded-lg mt-4 border border-gray-200/20 dark:border-gray-700/20">
+            {menuItems.map((item) => (
+              <a
                 key={item.name}
                 href={item.href}
                 onClick={(e) => {
@@ -128,13 +122,9 @@ export const Header = () => {
                   handleMenuClick(item.href);
                 }}
                 className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-orange-500 transition-colors duration-300 font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg mx-2"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ x: 10 }}
               >
                 {item.name}
-              </motion.a>
+              </a>
             ))}
           </div>
         </motion.nav>
@@ -142,3 +132,6 @@ export const Header = () => {
     </motion.header>
   );
 };
+
+// Export as memoized component
+export const Header = React.memo(HeaderComponent);

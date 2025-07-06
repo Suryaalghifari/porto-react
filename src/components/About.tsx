@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Code2, Folder, Download } from "lucide-react";
+import { Code2, Folder } from "lucide-react";
 import { fadeInUp, slideInLeft, slideInRight } from "../utils/animations";
 
 export const About = () => {
@@ -25,6 +25,7 @@ export const About = () => {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
+          {/* Foto Profile, animasi kiri */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -37,6 +38,9 @@ export const About = () => {
                 <img
                   src="/images/SuryaPhoto.jpg"
                   alt="Suryaalghifari"
+                  loading="lazy"
+                  width={256}
+                  height={256}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -45,6 +49,7 @@ export const About = () => {
             </div>
           </motion.div>
 
+          {/* Bio + Stats (animasi kanan) */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -66,12 +71,12 @@ export const About = () => {
               </blockquote>
             </div>
 
+            {/* Stats (no framer-motion per stat, only CSS hover) */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               {stats.map(({ icon: Icon, label, value }) => (
-                <motion.div
+                <div
                   key={label}
-                  whileHover={{ scale: 1.05 }}
-                  className="text-center p-6 bg-gray-50 dark:bg-gray-800 rounded-xl"
+                  className="text-center p-6 bg-gray-50 dark:bg-gray-800 rounded-xl transition-transform duration-300 hover:scale-105"
                 >
                   <Icon
                     size={32}
@@ -83,7 +88,7 @@ export const About = () => {
                   <div className="text-sm text-gray-600 dark:text-gray-300">
                     {label}
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </motion.div>
