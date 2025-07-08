@@ -84,7 +84,7 @@ export const Projects = () => {
         "Font Awesome",
       ],
       github: "https://github.com/Suryaalghifari/bookshelf-app", // (Ganti dengan repo kamu jika ada)
-      demo: "https://bookshelf-demo.vercel.app", // (Opsional, ganti dengan link demo kamu jika ada)
+      demo: "", // (Opsional, ganti dengan link demo kamu jika ada)
       featured: true,
       role: "Solo Developer",
     },
@@ -376,7 +376,7 @@ export const Projects = () => {
       {/* End Animated Background */}
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 py-20">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Featured{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500">

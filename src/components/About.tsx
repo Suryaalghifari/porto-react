@@ -10,7 +10,7 @@ export const About = () => {
   ];
 
   return (
-    <section id="about" className="py-20 bg-white dark:bg-gray-900">
+    <section id="about" className="">
       <div className="container mx-auto px-4">
         {/* Section Title (masih boleh motion) */}
         <div className="text-center mb-16">

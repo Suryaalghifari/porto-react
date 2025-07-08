@@ -1,10 +1,11 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import React from "react";
+import { motion } from "framer-motion";
+import { useScrollAnimation } from "../hooks/useScrollAnimation";
 
 export const ScrollIndicator = () => {
   const { scrollY } = useScrollAnimation();
-  const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const documentHeight =
+    document.documentElement.scrollHeight - window.innerHeight;
   const scrollProgress = Math.min(scrollY / documentHeight, 1);
 
   return (

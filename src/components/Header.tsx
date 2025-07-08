@@ -39,12 +39,7 @@ const HeaderComponent: React.FC = () => {
         y: scrollDirection === "up" || scrollY < 100 ? 0 : -100,
       }}
       transition={{ duration: 0.3 }}
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300
-        ${
-          scrolled
-            ? "bg-white/90 dark:bg-gray-900/90 /*backdrop-blur-md*/ shadow-lg border-b border-gray-200/20 dark:border-gray-700/20"
-            : "bg-transparent"
-        }`}
+      className="relative z-10"
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
@@ -53,13 +48,10 @@ const HeaderComponent: React.FC = () => {
             whileHover={{ scale: 1.05 }}
             className="text-2xl font-bold text-gray-900 dark:text-white relative"
           >
-            <span className="text-blue-600 dark:text-orange-500">Surya</span>
-            alghifari
-            <motion.div
-              className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-orange-500 dark:to-yellow-500"
-              initial={{ width: 0 }}
-              animate={{ width: "100%" }}
-              transition={{ duration: 2, delay: 1 }}
+            <img
+              src="/images/LogoS.png"
+              alt="Logo Suryaalghifari"
+              className="w-20 h-20 object-contain"
             />
           </motion.div>
 
@@ -112,7 +104,7 @@ const HeaderComponent: React.FC = () => {
           transition={{ duration: 0.3 }}
           className="md:hidden overflow-hidden"
         >
-          <div className="py-4 space-y-4 bg-white/90 dark:bg-gray-900/90 /*backdrop-blur-md*/ rounded-lg mt-4 border border-gray-200/20 dark:border-gray-700/20">
+          <div className="py-4 space-y-4 bg-transparent rounded-lg mt-4">
             {menuItems.map((item) => (
               <a
                 key={item.name}
