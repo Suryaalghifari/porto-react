@@ -14,17 +14,21 @@ import {
 
 export const Footer = () => {
   const socialLinks = [
-    { icon: Github, href: "#", label: "GitHub", color: "hover:text-gray-300" },
+    {
+      icon: Github,
+      href: "https://github.com/Suryaalghifari",
+      label: "GitHub",
+      color: "hover:text-gray-300",
+    },
     {
       icon: Linkedin,
-      href: "#",
+      href: "https://www.linkedin.com/in/muhamad-surya-al-ghifari-791625335",
       label: "LinkedIn",
       color: "hover:text-blue-400",
     },
-    { icon: Twitter, href: "#", label: "Twitter", color: "hover:text-sky-400" },
     {
       icon: Mail,
-      href: "mailto:suryaalghifari@example.com",
+      href: "mailto:m.suryaalghifari@gmail.com",
       label: "Email",
       color: "hover:text-red-400",
     },
@@ -184,7 +188,7 @@ export const Footer = () => {
             <div className="space-y-3 mb-6">
               <div className="flex items-center justify-center md:justify-start gap-3 text-gray-400">
                 <Mail size={16} />
-                <span className="text-sm">suryaalghifari@example.com</span>
+                <span className="text-sm">m.suryaalghifari@gmail.com</span>
               </div>
               <div className="flex items-center justify-center md:justify-start gap-3 text-gray-400">
                 <MapPin size={16} />
