@@ -10,9 +10,13 @@ export const Contact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
-    setFormData({ name: "", email: "", message: "" });
+    const subject = `Pesan dari ${formData.name} (${formData.email})`;
+    const body = encodeURIComponent(formData.message);
+
+    const email = "m.suryaalghifari@gmail.com";
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(
+      subject
+    )}&body=${body}`;
   };
 
   const handleInputChange = (
@@ -46,7 +50,7 @@ export const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="py-20">
+    <section id="contact" className="py-20 relative z-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
